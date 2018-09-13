@@ -23,6 +23,9 @@ redcheekMod = new Animal("Red-Cheeked Salamander", "redcheek", "Releases Poisono
 
 animals = {"redcheek":redcheekMod,"imitator":imitatorMim};
 
+
+var screenWidth = 975;
+var  screenHeight = 650;
 //setting parameters
 //making rectangles
 var light_green = [0,250,0];
@@ -30,8 +33,9 @@ var choose_game_rect = new rect_info(20,270,350,200,10);
 var choose_mimic_rect = new rect_info(choose_game_rect.x +3, choose_game_rect.y +60,225,40,10);
 var choose_croc_rect = new rect_info(choose_game_rect.x + 3, choose_game_rect.y + 130, 330, choose_mimic_rect.h, choose_mimic_rect.s);
 var eat_rect = new rect_info(200,375,100,40, 10);
-var anim1_rect = new rect_info(70,100,170,200, 0);
-var anim2_rect = new rect_info(260,anim1_rect.y, anim1_rect.l,anim1_rect.h,anim1_rect.s);
+var anim1_rect = new rect_info((screenWidth -(2*340 +50))/2,100,340,400, 0);
+var anim2_rect = new rect_info(anim1_rect.x+anim1_rect.l +50,anim1_rect.y, anim1_rect.l,anim1_rect.h,anim1_rect.s);
+var mim2_ready_rect = new rect_info(screenWidth/2 -80, screenHeight -60, 160,40, 10);
 
 function setup() {
     for ( key in animals){
@@ -40,18 +44,20 @@ function setup() {
             animals[key].photos.push(loadImage("pictures/" + name + i + ".jpg"))
         }
     }
-  createCanvas(500, 500);
+  var cnv = createCanvas(975, 650);
+  var cx = (windowWidth - 975) / 2;
+  var cy = (windowHeight -650) /2;
+  cnv.position(cx,cy);
 }
-
 var scenes = ['Intro','Mimic', 'Mimic2','Mimic3', 'Noise'];
-var scene = "Mimic2";
+var scene = "Intro";
 
 // check if mouse in a box
 var mouse_in_box = function(x,y,l,h) {
 	return mouseX > x && mouseY > y && mouseX < x + l && 
     mouseY < y + h;
 } 
-//  choosing a game box and choises
+//  choosing a game box and choices
 var game_choice_box = function (){
     fill(light_green);
 	noStroke();
@@ -122,10 +128,41 @@ safe to eat mimic and\n fill your stomach?", 42,55);
     fill(0);
     text("Let's Eat!", eat_rect.x + 3, eat_rect.y + 30);
 }
-  
+ 
+    
 var draw_mimic_start_scene = function(){
+        background(0,0,50);
    image(animals['imitator'].photos[0], anim1_rect.x,anim1_rect.y,anim1_rect.l,anim1_rect.h);
    image(animals["redcheek"].photos[0], anim2_rect.x,anim2_rect.y,anim2_rect.l,anim2_rect.h);
+   textSize(30);
+    fill(255);
+    text("Mimic!", anim1_rect.x -20, anim1_rect.y -40)
+    text("The Real Deal!", anim2_rect.x - 20, anim2_rect.y -40)
+
+   textSize(25);
+   text(animals["imitator"].name,anim1_rect.x, anim1_rect.y -5, anim1_rect.l);
+   text(animals["redcheek"].name, anim2_rect.x, anim2_rect.y-5);
+   bottomTextSize = 20;
+   textSize(bottomTextSize);
+  text(animals["imitator"].info, anim1_rect.x, anim1_rect.y + anim1_rect.h +bottomTextSize); 
+  text(animals["redcheek"].info, anim2_rect.x, anim2_rect.y + anim2_rect.h +bottomTextSize, anim2_rect.l); 
+ if (mouse_in_box(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,
+             mim2_ready_rect.h)){
+    fill(135,206,250);
+ }
+ else{
+    noFill();
+ }
+  rect(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,mim2_ready_rect.h, mim2_ready_rect.s);
+  fill(255);
+  textSize(25);
+  stroke(255);
+  text("Ready?", mim2_ready_rect.x +30, mim2_ready_rect.y +30)
+}
+
+var draw_mimic_game = function(){
+        
+
 }
 
 function draw() {
@@ -137,8 +174,10 @@ function draw() {
     draw_mimic_intro();
   }
   if (scene == "Mimic2"){
-  	background(0);
     draw_mimic_start_scene();
+  }
+  if(scene ==  "Mimic3"){
+    background(0);
   }
 }
 
@@ -150,5 +189,9 @@ function mouseClicked() {
   if (scene == "Mimic" && mouse_in_box(eat_rect.x, eat_rect.y,
                                        eat_rect.l, eat_rect.h)){
     scene = "Mimic2";
+  }
+  if (scene == "Mimic2" && mouse_in_box(mim2_ready_rect.x,
+          mim2_ready_rect.y, mim2_ready_rect.l, mim2_ready_rect.h)){
+    scene = "Mimic3";
   }
 }
