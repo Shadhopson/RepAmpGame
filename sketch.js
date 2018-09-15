@@ -32,11 +32,12 @@ var light_green = [0,250,0];
 var choose_game_rect = new rect_info(20,270,350,200,10);
 var choose_mimic_rect = new rect_info(choose_game_rect.x +3, choose_game_rect.y +60,225,40,10);
 var choose_croc_rect = new rect_info(choose_game_rect.x + 3, choose_game_rect.y + 130, 330, choose_mimic_rect.h, choose_mimic_rect.s);
-var eat_rect = new rect_info(200,375,100,40, 10);
+var eat_rect = new rect_info(screenWidth/2 - 50,375,115,40, 10);
 var anim1_rect = new rect_info((screenWidth -(2*340 +50))/2,100,340,400, 0);
 var anim2_rect = new rect_info(anim1_rect.x+anim1_rect.l +50,anim1_rect.y, anim1_rect.l,anim1_rect.h,anim1_rect.s);
 var mim2_ready_rect = new rect_info(screenWidth/2 -80, screenHeight -60, 160,40, 10);
 
+var mimic_box = 0;
 function setup() {
     for ( key in animals){
         var name = animals[key].filename;
@@ -50,7 +51,7 @@ function setup() {
   cnv.position(cx,cy);
 }
 var scenes = ['Intro','Mimic', 'Mimic2','Mimic3', 'Noise'];
-var scene = "Intro";
+var scene = "Mimic";
 
 // check if mouse in a box
 var mouse_in_box = function(x,y,l,h) {
@@ -92,7 +93,8 @@ var game_choice_box = function (){
 	 	fill(0,150,0);
 		text("The Crocodile Goes...", choose_croc_rect.x + 3, choose_croc_rect.y + 30);
 }
-  
+ 
+
 //background of intro screen  
 var draw_intro = function(){
   	background(0,200,0);
@@ -110,14 +112,16 @@ var draw_intro = function(){
 var draw_mimic_intro = function(){
     background(0,0,50);
     fill(255,255,255);
-    rect(30,30,420,400);
+    var notewidth = 520;
+    var note_x =  screenWidth/2 - notewidth/2;
+    rect(note_x,30,notewidth,500);
     fill(0);
-    textSize(20);
-    text(" You're a young predatory bird, new to\n hunting in an\
- area full of dangerous\n prey! Some are too dangerous to hunt,\n \
-but some animals just mimic how the\n dangerous animals look!\
-Can you tell\n the difference between a dangerous\n prey and the \
-safe to eat mimic and\n fill your stomach?", 42,55);
+    textSize(25);
+    text(" You're a young predatory bird, new to hunting in an\
+ area full of dangerous prey! Some are too dangerous to hunt, \
+but some animals just mimic how the dangerous animals look! \
+Can you tell the difference between a dangerous prey and the \
+safe to eat mimic and fill your stomach?", note_x + 75,75, 370);
     if (mouse_in_box(eat_rect.x,eat_rect.y,eat_rect.l,eat_rect.h)){
         fill(135,206,250);
     }
@@ -128,12 +132,29 @@ safe to eat mimic and\n fill your stomach?", 42,55);
     fill(0);
     text("Let's Eat!", eat_rect.x + 3, eat_rect.y + 30);
 }
- 
+
+var get_random_int =  function(max) {
+	return Math.floor(Math.random() * Math.floor(max));
+}
+
+var draw_animals = function(animal1, animal2, photoNum, ordered){
+	var rand_num = 0;
+	if (ordered || rand_num){
+	   image(animals[animal1].photos[photoNum], anim1_rect.x,anim1_rect.y,anim1_rect.l,anim1_rect.h);
+	   image(animals[animal2].photos[photoNum], anim2_rect.x,anim2_rect.y,anim2_rect.l,anim2_rect.h);
+	}
+	else {
+	   image(animals[animal2].photos[photoNum], anim1_rect.x,anim1_rect.y,anim1_rect.l,anim1_rect.h);
+	   image(animals[animal1].photos[photoNum], anim2_rect.x,anim2_rect.y,anim2_rect.l,anim2_rect.h);
+
+	}
+return rand_num
+
+}
     
 var draw_mimic_start_scene = function(){
         background(0,0,50);
-   image(animals['imitator'].photos[0], anim1_rect.x,anim1_rect.y,anim1_rect.l,anim1_rect.h);
-   image(animals["redcheek"].photos[0], anim2_rect.x,anim2_rect.y,anim2_rect.l,anim2_rect.h);
+   draw_animals('imitator', 'redcheek',0 ,true);
    textSize(30);
     fill(255);
     text("Mimic!", anim1_rect.x -20, anim1_rect.y -40)
@@ -159,16 +180,16 @@ var draw_mimic_start_scene = function(){
   stroke(255);
   text("Ready?", mim2_ready_rect.x +30, mim2_ready_rect.y +30)
 }
-
+photo_counter =  1;
 var draw_mimic_game = function(){
-        
-
+   background(0,0,50);
+   draw_animals('imitator', 'redcheek',photo_counter ,false);
 }
 
 function draw() {
   if (scene == "Intro"){
 	  draw_intro();
-		game_choice_box()
+        	game_choice_box()
   }
   if (scene == "Mimic"){
     draw_mimic_intro();
@@ -177,7 +198,8 @@ function draw() {
     draw_mimic_start_scene();
   }
   if(scene ==  "Mimic3"){
-    background(0);
+	  background(0);
+	  draw_mimic_game();
   }
 }
 
@@ -194,4 +216,14 @@ function mouseClicked() {
           mim2_ready_rect.y, mim2_ready_rect.l, mim2_ready_rect.h)){
     scene = "Mimic3";
   }
+  if ( scene == "Mimic3"){
+ 	if (mouse_in_box(anim1_rect.x, anim1_rect.y, anim1_rect.l,
+		       anim1_rect.h)){
+		
+	}	
+  
+  
+  
+  }
+
 }
