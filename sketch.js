@@ -13,19 +13,26 @@ class Animal {
 		this.name = name;
 		this.filename = filename;
 		this.info = info;
-	  	this.photos = [];	
+	  	this.photos = [];
 	}
 }
 
 //make animals
 imitatorMim = new Animal("Imitator Salamander", "imitator", "Poison Free And Oh So Tasty!");
 redcheekMod = new Animal("Red-Cheeked Salamander", "redcheek", "Releases Poisonous Secretions From It's Skin. Don't Eat It!");
+bushveldMim = new Animal("Bushveld Lizard", "bushveld", "An Excellent Meal!")
+oogpisterMod =  new Animal("Oogpister Beetle", "oogpister", "Shoots Boiling Hot Noxious Chemicals Out Of Its Abdomen. Avoid!")
+skarletkingMim = new Animal("Skarlet King Snake", "skarletking", "A Red Faced Meal That Likes To Hide Beneath Decaying Wood.")
+coralMod = new Animal("Coral Snake", "coral", "One of the most venomous snakes in North America. Don't bother it.")
 
-animals = {"redcheek":redcheekMod,"imitator":imitatorMim};
+animals = {"redcheek":redcheekMod,"imitator":imitatorMim, "bushveld":bushveldMim,
+"oogpister":oogpisterMod, "skarletking": skarletkingMim, "coral": coralMod};
 
 
 var screenWidth = 975;
 var  screenHeight = 650;
+var health = 3;
+var score = 0;
 //setting parameters
 //making rectangles
 var light_green = [0,250,0];
@@ -50,14 +57,15 @@ function setup() {
   var cy = (windowHeight -650) /2;
   cnv.position(cx,cy);
 }
+
 var scenes = ['Intro','Mimic', 'Mimic2','Mimic3', 'Noise'];
 var scene = "Mimic";
 
 // check if mouse in a box
 var mouse_in_box = function(x,y,l,h) {
-	return mouseX > x && mouseY > y && mouseX < x + l && 
+	return mouseX > x && mouseY > y && mouseX < x + l &&
     mouseY < y + h;
-} 
+}
 //  choosing a game box and choices
 var game_choice_box = function (){
     fill(light_green);
@@ -93,9 +101,9 @@ var game_choice_box = function (){
 	 	fill(0,150,0);
 		text("The Crocodile Goes...", choose_croc_rect.x + 3, choose_croc_rect.y + 30);
 }
- 
 
-//background of intro screen  
+
+//background of intro screen
 var draw_intro = function(){
   	background(0,200,0);
 	x = 500/2-100;
@@ -125,7 +133,7 @@ safe to eat mimic and fill your stomach?", note_x + 75,75, 370);
     if (mouse_in_box(eat_rect.x,eat_rect.y,eat_rect.l,eat_rect.h)){
         fill(135,206,250);
     }
-    else{  
+    else{
         fill(255);
     }
   	rect(eat_rect.x,eat_rect.y,eat_rect.l,eat_rect.h, eat_rect.s);
@@ -151,7 +159,7 @@ var draw_animals = function(animal1, animal2, photoNum, ordered){
 return rand_num
 
 }
-    
+
 var draw_mimic_start_scene = function(){
         background(0,0,50);
    draw_animals('imitator', 'redcheek',0 ,true);
@@ -165,8 +173,8 @@ var draw_mimic_start_scene = function(){
    text(animals["redcheek"].name, anim2_rect.x, anim2_rect.y-5);
    bottomTextSize = 20;
    textSize(bottomTextSize);
-  text(animals["imitator"].info, anim1_rect.x, anim1_rect.y + anim1_rect.h +bottomTextSize); 
-  text(animals["redcheek"].info, anim2_rect.x, anim2_rect.y + anim2_rect.h +bottomTextSize, anim2_rect.l); 
+  text(animals["imitator"].info, anim1_rect.x, anim1_rect.y + anim1_rect.h +bottomTextSize);
+  text(animals["redcheek"].info, anim2_rect.x, anim2_rect.y + anim2_rect.h +bottomTextSize, anim2_rect.l);
  if (mouse_in_box(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,
              mim2_ready_rect.h)){
     fill(135,206,250);
@@ -184,6 +192,8 @@ photo_counter =  1;
 var draw_mimic_game = function(){
    background(0,0,50);
    draw_animals('imitator', 'redcheek',photo_counter ,false);
+
+
 }
 
 function draw() {
@@ -204,7 +214,7 @@ function draw() {
 }
 
 function mouseClicked() {
-	if (scene == "Intro" && mouse_in_box(choose_mimic_rect.x, choose_mimic_rect.y, 
+	if (scene == "Intro" && mouse_in_box(choose_mimic_rect.x, choose_mimic_rect.y,
                                        choose_mimic_rect.l, choose_mimic_rect.h)){
   	scene = "Mimic";
   }
@@ -219,11 +229,11 @@ function mouseClicked() {
   if ( scene == "Mimic3"){
  	if (mouse_in_box(anim1_rect.x, anim1_rect.y, anim1_rect.l,
 		       anim1_rect.h)){
-		
-	}	
-  
-  
-  
+
+	}
+
+
+
   }
 
 }
