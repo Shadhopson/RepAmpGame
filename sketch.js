@@ -25,8 +25,7 @@ oogpisterMod =  new Animal("Oogpister Beetle", "oogpister", "Shoots Boiling Hot 
 skarletkingMim = new Animal("Skarlet King Snake", "skarletking", "A Red Faced Meal That Likes To Hide Beneath Decaying Wood.")
 coralMod = new Animal("Coral Snake", "coral", "One of the most venomous snakes in North America. Don't bother it.")
 
-animals = {"redcheek":redcheekMod,"imitator":imitatorMim, "bushveld":bushveldMim,
-"oogpister":oogpisterMod, "skarletking": skarletkingMim, "coral": coralMod};
+animals = {"redcheek":redcheekMod,"imitator":imitatorMim, "bushveld":bushveldMim,"oogpister":oogpisterMod, "skarletking": skarletkingMim, "coral": coralMod};
 
 
 var screenWidth = 975;
@@ -69,12 +68,12 @@ var mouse_in_box = function(x,y,l,h) {
 //  choosing a game box and choices
 var game_choice_box = function (){
     fill(light_green);
-	noStroke();
-	rect(choose_game_rect.x,choose_game_rect.y,choose_game_rect.l,choose_game_rect.h, choose_game_rect.s);
-	fill(0,150,0);
-	textSize(30);
-	text("Choose A Game:", choose_game_rect.x+5,choose_game_rect.y + 40);
-	strokeWeight(1);
+    noStroke();
+		rect(choose_game_rect.x,choose_game_rect.y,choose_game_rect.l,choose_game_rect.h, choose_game_rect.s);
+		fill(0,150,0);
+		textSize(30);
+		text("Choose A Game:", choose_game_rect.x+5,choose_game_rect.y + 40);
+		strokeWeight(1);
 
     // MIMIC BOX
     if (mouse_in_box(choose_mimic_rect.x,choose_mimic_rect.y,choose_mimic_rect.l,choose_mimic_rect.h, choose_mimic_rect.s)) {
@@ -144,10 +143,16 @@ safe to eat mimic and fill your stomach?", note_x + 75,75, 370);
 var get_random_int =  function(max) {
 	return Math.floor(Math.random() * Math.floor(max));
 }
-
+var is_mimic_first = 0
 var draw_animals = function(animal1, animal2, photoNum, ordered){
+	console.log(animal1);
+	console.log(animal2);
+	console.log(animals);
+	console.log(animals['skarletking']);
+	console.log(animals[animal1]);
+	console.log('skarletking')
 	var rand_num = 0;
-	if (ordered || rand_num){
+	if (ordered || is_mimic_first){
 	   image(animals[animal1].photos[photoNum], anim1_rect.x,anim1_rect.y,anim1_rect.l,anim1_rect.h);
 	   image(animals[animal2].photos[photoNum], anim2_rect.x,anim2_rect.y,anim2_rect.l,anim2_rect.h);
 	}
@@ -156,25 +161,25 @@ var draw_animals = function(animal1, animal2, photoNum, ordered){
 	   image(animals[animal1].photos[photoNum], anim2_rect.x,anim2_rect.y,anim2_rect.l,anim2_rect.h);
 
 	}
-return rand_num
+
 
 }
 
-var draw_mimic_start_scene = function(){
-        background(0,0,50);
-   draw_animals('imitator', 'redcheek',0 ,true);
-   textSize(30);
+var draw_mimic_start_scene = function(animal1, animal2){
+    background(0,0,50);
+    draw_animals(animal1, animal2,0 ,true);
+    textSize(30);
     fill(255);
     text("Mimic!", anim1_rect.x -20, anim1_rect.y -40)
     text("The Real Deal!", anim2_rect.x - 20, anim2_rect.y -40)
 
    textSize(25);
-   text(animals["imitator"].name,anim1_rect.x, anim1_rect.y -5, anim1_rect.l);
-   text(animals["redcheek"].name, anim2_rect.x, anim2_rect.y-5);
+   text(animals[animal1].name,anim1_rect.x, anim1_rect.y -5, anim1_rect.l);
+   text(animals[animal2].name, anim2_rect.x, anim2_rect.y-5);
    bottomTextSize = 20;
    textSize(bottomTextSize);
-  text(animals["imitator"].info, anim1_rect.x, anim1_rect.y + anim1_rect.h +bottomTextSize);
-  text(animals["redcheek"].info, anim2_rect.x, anim2_rect.y + anim2_rect.h +bottomTextSize, anim2_rect.l);
+  text(animals[animal1].info, anim1_rect.x, anim1_rect.y + anim1_rect.h +bottomTextSize);
+  text(animals[animal2].info, anim2_rect.x, anim2_rect.y + anim2_rect.h +bottomTextSize, anim2_rect.l);
  if (mouse_in_box(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,
              mim2_ready_rect.h)){
     fill(135,206,250);
@@ -189,13 +194,83 @@ var draw_mimic_start_scene = function(){
   text("Ready?", mim2_ready_rect.x +30, mim2_ready_rect.y +30)
 }
 photo_counter =  1;
-var draw_mimic_game = function(){
+
+var chosen = false;
+var timer = 100;
+var draw_button = function(){
+	if (mouse_in_box(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,
+              mim2_ready_rect.h)){
+     fill(135,206,250);
+  }
+  else{
+     noFill();
+  }
+   rect(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,mim2_ready_rect.h, mim2_ready_rect.s);
+   fill(255);
+   textSize(25);
+   stroke(255);
+   text("Ready?", mim2_ready_rect.x +30, mim2_ready_rect.y +30)
+ }
+
+var draw_heart = function(x,y){
+	smooth();
+	noStroke();
+	fill(255,0,0);
+	beginShape();
+	vertex(x+50, y+15);
+	bezierVertex(x+50, y-5, x+90, y+5, x+50, y+40);
+	vertex(x+50, y+15);
+	bezierVertex(x+50, y-5, x+10, y+5, x+50, y+40);
+	endShape();
+}
+var correct = true;
+var draw_mimic_game = function(animal1, animal2){
+	 timer -= 0.3;
    background(0,0,50);
-   draw_animals('imitator', 'redcheek',photo_counter ,false);
+	 fill(255);
+   draw_animals(animal1, animal2,photo_counter ,false);
+	 text(mouseX +', ' + mouseY, mouseX, mouseY);
+	 for (var i = 0; i < health; i++){
+	    draw_heart(10 + i*50, 550);
+   }
+	 text("Score: "+score,20,50);
+	 if (chosen){
+		 draw_button();
+      if(correct){
+				text("Tasty! Nice Catch!", anim1_rect.x +50, anim1_rect.y-50);
+			}
+			else{
+				text("Ouch! Don't eat that!", anim1_rect.x +50, anim1_rect.y-50);
+			}
+		}
+
+	 else if(timer <= 10){
+		 	text("It Escaped!", anim1_rect.x +50, anim1_rect.y-50);
+			draw_button();
+	 }
+	 else{
+		 text("Catch the mimic before it runs away!", anim1_rect.x +50, anim1_rect.y-50);
+		 fill(200,200,200);
+		 rect(anim1_rect.x + 200, anim1_rect.y - 40,100, 20, 10);
+		 fill(250+-2*timer, 2*timer, 0);
+		 rect(anim1_rect.x + 200, anim1_rect.y - 40,timer, 20,10);
+
+		 if (mouse_in_box(anim1_rect.x, anim1_rect.y, anim1_rect.l, anim1_rect.h,)){
+			 //stroke(50,50,200);
+			 fill(250+-2*timer, 2*timer, 0, 50);
+			 rect(anim1_rect.x, anim1_rect.y, anim1_rect.l,anim1_rect.h);
+		 }
+		 if (mouse_in_box(anim2_rect.x, anim2_rect.y, anim2_rect.l, anim2_rect.h,)){
+			 //stroke(50,50,200);
+			 fill(250+-2*timer, 2*timer, 0, 90);
+			 rect(anim2_rect.x, anim2_rect.y, anim2_rect.l,anim2_rect.h);
+		 }
+	 }
 
 
 }
-
+var pair_count = 0;
+var animal_pair = [["bushveld","oogpister"],["imitator", "redcheek"],["skarletking","coral"]];
 function draw() {
   if (scene == "Intro"){
 	  draw_intro();
@@ -205,11 +280,11 @@ function draw() {
     draw_mimic_intro();
   }
   if (scene == "Mimic2"){
-    draw_mimic_start_scene();
+    draw_mimic_start_scene(animal_pair[pair_count][0],animal_pair[pair_count][1]);
   }
   if(scene ==  "Mimic3"){
 	  background(0);
-	  draw_mimic_game();
+	  draw_mimic_game(animal_pair[pair_count][0],animal_pair[pair_count][1]);
   }
 }
 
@@ -221,17 +296,54 @@ function mouseClicked() {
   if (scene == "Mimic" && mouse_in_box(eat_rect.x, eat_rect.y,
                                        eat_rect.l, eat_rect.h)){
     scene = "Mimic2";
+		is_mimic_first = get_random_int(2);
   }
   if (scene == "Mimic2" && mouse_in_box(mim2_ready_rect.x,
           mim2_ready_rect.y, mim2_ready_rect.l, mim2_ready_rect.h)){
     scene = "Mimic3";
+		is_mimic_first = get_random_int(2);
   }
   if ( scene == "Mimic3"){
- 	if (mouse_in_box(anim1_rect.x, anim1_rect.y, anim1_rect.l,
+ 		if (mouse_in_box(anim1_rect.x, anim1_rect.y, anim1_rect.l,
 		       anim1_rect.h)){
+						 if(is_mimic_first){
+							 score +=10;
+							 chosen = true;
+							 correct = true;
+						 }
+						 else{
+							 health -= 1;
+							 chosen = true;
+							 correct = false;
+						 }
+					 }
+	if (mouse_in_box(anim2_rect.x, anim2_rect.y, anim2_rect.l,
+			 		 anim2_rect.h)){
+			 			if(!is_mimic_first){
+			 					score +=10;
+			 					chosen = true;
+								correct = true;
+			 			}
+			 			else{
+			 					health -= 1;
+			 					chosen = true;
+								correct = false;
+			 			}
 
-	}
+	  }
+		if((timer <5 || chosen) && mouse_in_box(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,
+	              mim2_ready_rect.h)){
+									chosen = false;
+									timer = 100;
+									photo_counter ++;
+									is_mimic_first = get_random_int(2);
+									if(photo_counter > 5){
+										photo_counter = 0;
+										scene = "Mimic";
+										pair_count ++;
 
+									}
+								}
 
 
   }
