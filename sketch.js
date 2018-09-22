@@ -32,6 +32,16 @@ var screenWidth = 975;
 var  screenHeight = 650;
 var health = 3;
 var score = 0;
+var change = true;
+var photo_counter =  1;
+var chosen = false;
+var timer = 100;
+var scenes = ['Intro','Mimic', 'Mimic2','Mimic3', 'Noise'];
+var scene = "Mimic";
+var is_mimic_first = 0;
+var pair_count = 0;
+var animal_pair = [["bushveld","oogpister"],["imitator", "redcheek"],["skarletking","coral"]];
+
 //setting parameters
 //making rectangles
 var light_green = [0,250,0];
@@ -57,8 +67,6 @@ function setup() {
   cnv.position(cx,cy);
 }
 
-var scenes = ['Intro','Mimic', 'Mimic2','Mimic3', 'Noise'];
-var scene = "Mimic";
 
 // check if mouse in a box
 var mouse_in_box = function(x,y,l,h) {
@@ -143,14 +151,8 @@ safe to eat mimic and fill your stomach?", note_x + 75,75, 370);
 var get_random_int =  function(max) {
 	return Math.floor(Math.random() * Math.floor(max));
 }
-var is_mimic_first = 0
+
 var draw_animals = function(animal1, animal2, photoNum, ordered){
-	console.log(animal1);
-	console.log(animal2);
-	console.log(animals);
-	console.log(animals['skarletking']);
-	console.log(animals[animal1]);
-	console.log('skarletking')
 	var rand_num = 0;
 	if (ordered || is_mimic_first){
 	   image(animals[animal1].photos[photoNum], anim1_rect.x,anim1_rect.y,anim1_rect.l,anim1_rect.h);
@@ -166,7 +168,7 @@ var draw_animals = function(animal1, animal2, photoNum, ordered){
 }
 
 var draw_mimic_start_scene = function(animal1, animal2){
-    background(0,0,50);
+    background(50,50,150);
     draw_animals(animal1, animal2,0 ,true);
     textSize(30);
     fill(255);
@@ -193,10 +195,7 @@ var draw_mimic_start_scene = function(animal1, animal2){
   stroke(255);
   text("Ready?", mim2_ready_rect.x +30, mim2_ready_rect.y +30)
 }
-photo_counter =  1;
 
-var chosen = false;
-var timer = 100;
 var draw_button = function(){
 	if (mouse_in_box(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,
               mim2_ready_rect.h)){
@@ -233,6 +232,7 @@ var draw_mimic_game = function(animal1, animal2){
 	 for (var i = 0; i < health; i++){
 	    draw_heart(10 + i*50, 550);
    }
+	 fill(255);
 	 text("Score: "+score,20,50);
 	 if (chosen){
 		 draw_button();
@@ -255,12 +255,12 @@ var draw_mimic_game = function(animal1, animal2){
 		 fill(250+-2*timer, 2*timer, 0);
 		 rect(anim1_rect.x + 200, anim1_rect.y - 40,timer, 20,10);
 
-		 if (mouse_in_box(anim1_rect.x, anim1_rect.y, anim1_rect.l, anim1_rect.h,)){
+		 if (mouse_in_box(anim1_rect.x, anim1_rect.y, anim1_rect.l, anim1_rect.h)){
 			 //stroke(50,50,200);
 			 fill(250+-2*timer, 2*timer, 0, 50);
 			 rect(anim1_rect.x, anim1_rect.y, anim1_rect.l,anim1_rect.h);
 		 }
-		 if (mouse_in_box(anim2_rect.x, anim2_rect.y, anim2_rect.l, anim2_rect.h,)){
+		 if (mouse_in_box(anim2_rect.x, anim2_rect.y, anim2_rect.l, anim2_rect.h)){
 			 //stroke(50,50,200);
 			 fill(250+-2*timer, 2*timer, 0, 90);
 			 rect(anim2_rect.x, anim2_rect.y, anim2_rect.l,anim2_rect.h);
@@ -269,26 +269,34 @@ var draw_mimic_game = function(animal1, animal2){
 
 
 }
-var pair_count = 0;
-var animal_pair = [["bushveld","oogpister"],["imitator", "redcheek"],["skarletking","coral"]];
+
 function draw() {
-  if (scene == "Intro"){
-	  draw_intro();
-        	game_choice_box()
-  }
-  if (scene == "Mimic"){
-    draw_mimic_intro();
-  }
-  if (scene == "Mimic2"){
-    draw_mimic_start_scene(animal_pair[pair_count][0],animal_pair[pair_count][1]);
-  }
-  if(scene ==  "Mimic3"){
-	  background(0);
-	  draw_mimic_game(animal_pair[pair_count][0],animal_pair[pair_count][1]);
-  }
+	if(health <= 0){
+			background(255);
+	}
+	else{
+	  if (scene == "Intro"){
+		  draw_intro();
+	    game_choice_box()
+	  }
+	  if (scene == "Mimic"){
+	    draw_mimic_intro();
+	  }
+	  if (scene == "Mimic2"){
+	    draw_mimic_start_scene(animal_pair[pair_count][0],animal_pair[pair_count][1]);
+	  }
+	  if(scene ==  "Mimic3"){
+		  background(0);
+		  draw_mimic_game(animal_pair[pair_count][0],animal_pair[pair_count][1]);
+	  }
+		if(scene == "GoodEnd") {
+				background(0);
+		}
+}
 }
 
 function mouseClicked() {
+
 	if (scene == "Intro" && mouse_in_box(choose_mimic_rect.x, choose_mimic_rect.y,
                                        choose_mimic_rect.l, choose_mimic_rect.h)){
   	scene = "Mimic";
@@ -303,31 +311,37 @@ function mouseClicked() {
     scene = "Mimic3";
 		is_mimic_first = get_random_int(2);
   }
+	// mimic game set up
   if ( scene == "Mimic3"){
+		//choosing a creature
  		if (mouse_in_box(anim1_rect.x, anim1_rect.y, anim1_rect.l,
-		       anim1_rect.h)){
+		       anim1_rect.h) && change){
 						 if(is_mimic_first){
 							 score +=10;
 							 chosen = true;
 							 correct = true;
+							 change = false;
 						 }
 						 else{
 							 health -= 1;
 							 chosen = true;
 							 correct = false;
+							 change = false;
 						 }
 					 }
 	if (mouse_in_box(anim2_rect.x, anim2_rect.y, anim2_rect.l,
-			 		 anim2_rect.h)){
+			 		 anim2_rect.h) && change){
 			 			if(!is_mimic_first){
 			 					score +=10;
 			 					chosen = true;
 								correct = true;
+								change = false;
 			 			}
 			 			else{
 			 					health -= 1;
 			 					chosen = true;
 								correct = false;
+								change = false;
 			 			}
 
 	  }
@@ -337,14 +351,17 @@ function mouseClicked() {
 									timer = 100;
 									photo_counter ++;
 									is_mimic_first = get_random_int(2);
+									change = true;
 									if(photo_counter > 5){
-										photo_counter = 0;
-										scene = "Mimic";
+										photo_counter = 1;
+										scene = "Mimic2";
 										pair_count ++;
+										if (pair_count >= animal_pair.length ){
+											scene = "GoodEnd"
+										}
 
 									}
-								}
-
+			}
 
   }
 
