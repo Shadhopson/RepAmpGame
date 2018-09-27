@@ -61,6 +61,7 @@ function setup() {
             animals[key].photos.push(loadImage("pictures/" + name + i + ".jpg"))
         }
     }
+	bird = loadImage("pictures/bird.png")
   var cnv = createCanvas(975, 650);
   var cx = (windowWidth - 975) / 2;
   var cy = (windowHeight -650) /2;
@@ -293,8 +294,8 @@ function draw() {
 				background(0);
 		}
 }
+	image(bird, mouseX-50, mouseY-100, 120,120);
 }
-
 function mouseClicked() {
 
 	if (scene == "Intro" && mouse_in_box(choose_mimic_rect.x, choose_mimic_rect.y,
