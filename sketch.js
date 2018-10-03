@@ -18,6 +18,7 @@ class Animal {
 }
 
 //make animals
+
 imitatorMim = new Animal("Imitator Salamander", "imitator", "Poison Free And Oh So Tasty!");
 redcheekMod = new Animal("Red-Cheeked Salamander", "redcheek", "Releases Poisonous Secretions From It's Skin. Don't Eat It!");
 bushveldMim = new Animal("Bushveld Lizard", "bushveld", "An Excellent Meal!")
@@ -41,17 +42,24 @@ var scene = "Mimic";
 var is_mimic_first = 0;
 var pair_count = 0;
 var animal_pair = [["bushveld","oogpister"],["imitator", "redcheek"],["skarletking","coral"]];
-
+var white  = [255,246,238];
+var orange = [219,131,96];
+var light_orange = [255, 152, 112];
+var light_red = [178,72,61];
+var purple = [88,47,59];
+var light_green = [151,185,138];
+var light_purple = [176,94,118];
 //setting parameters
 //making rectangles
-var light_green = [0,250,0];
+//var light_green = [0,250,0];
 var choose_game_rect = new rect_info(20,270,350,200,10);
 var choose_mimic_rect = new rect_info(choose_game_rect.x +3, choose_game_rect.y +60,225,40,10);
 var choose_croc_rect = new rect_info(choose_game_rect.x + 3, choose_game_rect.y + 130, 330, choose_mimic_rect.h, choose_mimic_rect.s);
-var eat_rect = new rect_info(screenWidth/2 - 50,375,115,40, 10);
+var eat_rect = new rect_info(screenWidth/2 - 70,screenHeight - 175,115,40, 10);
 var anim1_rect = new rect_info((screenWidth -(2*340 +50))/2,100,340,400, 0);
 var anim2_rect = new rect_info(anim1_rect.x+anim1_rect.l +50,anim1_rect.y, anim1_rect.l,anim1_rect.h,anim1_rect.s);
-var mim2_ready_rect = new rect_info(screenWidth/2 -80, screenHeight -60, 160,40, 10);
+var mim2_ready_rect = new rect_info(screenWidth/2 -80, screenHeight -70, 140,40, 10);
+var restart_rect =  new rect_info(865,550,90,50, 10);
 
 var mimic_box = 0;
 function setup() {
@@ -126,23 +134,25 @@ var draw_intro = function(){
 
 // MIMIC GAME INTRO
 var draw_mimic_intro = function(){
-    background(0,0,50);
-    fill(255,255,255);
+    background(purple);
+    fill(white);
     var notewidth = 520;
+		var noteheight = 500;
     var note_x =  screenWidth/2 - notewidth/2;
-    rect(note_x,30,notewidth,500);
+		var note_y = screenHeight/2 - noteheight/2;
+    rect(note_x,note_y,notewidth,noteheight);
     fill(0);
     textSize(25);
     text(" You're a young predatory bird, new to hunting in an\
  area full of dangerous prey! Some are too dangerous to hunt, \
 but some animals just mimic how the dangerous animals look! \
 Can you tell the difference between a dangerous prey and the \
-safe to eat mimic and fill your stomach?", note_x + 75,75, 370);
+safe to eat mimic and fill your stomach?", note_x + 75,note_y + 75, 370);
     if (mouse_in_box(eat_rect.x,eat_rect.y,eat_rect.l,eat_rect.h)){
-        fill(135,206,250);
+        fill(orange);
     }
     else{
-        fill(255);
+        fill(light_purple);
     }
   	rect(eat_rect.x,eat_rect.y,eat_rect.l,eat_rect.h, eat_rect.s);
     fill(0);
@@ -169,10 +179,10 @@ var draw_animals = function(animal1, animal2, photoNum, ordered){
 }
 
 var draw_mimic_start_scene = function(animal1, animal2){
-    background(50,50,150);
+    background(purple);
     draw_animals(animal1, animal2,0 ,true);
     textSize(30);
-    fill(255);
+    fill(white);
     text("Mimic!", anim1_rect.x -20, anim1_rect.y -40)
     text("The Real Deal!", anim2_rect.x - 20, anim2_rect.y -40)
 
@@ -185,28 +195,28 @@ var draw_mimic_start_scene = function(animal1, animal2){
   text(animals[animal2].info, anim2_rect.x, anim2_rect.y + anim2_rect.h +bottomTextSize, anim2_rect.l);
  if (mouse_in_box(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,
              mim2_ready_rect.h)){
-    fill(135,206,250);
+    fill(orange);
  }
  else{
-    noFill();
+	  fill(white);
  }
   rect(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,mim2_ready_rect.h, mim2_ready_rect.s);
-  fill(255);
+  fill(purple);
   textSize(25);
-  stroke(255);
+  //stroke(255);
   text("Ready?", mim2_ready_rect.x +30, mim2_ready_rect.y +30)
 }
 
 var draw_button = function(){
 	if (mouse_in_box(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,
               mim2_ready_rect.h)){
-     fill(135,206,250);
+     fill(orange);
   }
   else{
-     noFill();
+     fill(white);
   }
-   rect(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,mim2_ready_rect.h, mim2_ready_rect.s);
-   fill(255);
+   rect(mim2_ready_rect.x, mim2_ready_rect.y , mim2_ready_rect.l,mim2_ready_rect.h, mim2_ready_rect.s);
+   fill(purple);
    textSize(25);
    stroke(255);
    text("Ready?", mim2_ready_rect.x +30, mim2_ready_rect.y +30)
@@ -215,7 +225,8 @@ var draw_button = function(){
 var draw_heart = function(x,y){
 	smooth();
 	noStroke();
-	fill(255,0,0);
+	//fill(255,0,0);
+	fill(light_red);
 	beginShape();
 	vertex(x+50, y+15);
 	bezierVertex(x+50, y-5, x+90, y+5, x+50, y+40);
@@ -226,35 +237,47 @@ var draw_heart = function(x,y){
 var correct = true;
 var draw_mimic_game = function(animal1, animal2){
 	 timer -= 0.3;
-   background(0,0,50);
+   background(purple);
 	 fill(255);
    draw_animals(animal1, animal2,photo_counter ,false);
 	 text(mouseX +', ' + mouseY, mouseX, mouseY);
 	 for (var i = 0; i < health; i++){
-	    draw_heart(10 + i*50, 550);
+	    draw_heart(10 + i*50, 25);
    }
-	 fill(255);
-	 text("Score: "+score,20,50);
+	 textSize(40);
+	 fill(white);
+	 text("Fullness: "+Math.round((score *(2/3))) + "%",630,60);
+	 var upper_text_x = anim1_rect.x+150;
+	 var upper_text_y = anim1_rect.y +450;
+	 var extra = 100;
+	 textSize(30);
 	 if (chosen){
 		 draw_button();
+		 fill(white);
       if(correct){
-				text("Tasty! Nice Catch!", anim1_rect.x +50, anim1_rect.y-50);
+
+				text("Tasty! Nice Catch!", upper_text_x +100, upper_text_y);
 			}
 			else{
-				text("Ouch! Don't eat that!", anim1_rect.x +50, anim1_rect.y-50);
+
+				text("Ouch! Don't eat that!",upper_text_x+100, upper_text_y);
 			}
 		}
 
 	 else if(timer <= 10){
-		 	text("It Escaped!", anim1_rect.x +50, anim1_rect.y-50);
+
+		 	text("It Escaped!", upper_text_x+100, upper_text_y);
 			draw_button();
 	 }
 	 else{
-		 text("Catch the mimic before it runs away!", anim1_rect.x +50, anim1_rect.y-50);
+
+		 text("Catch the mimic before it runs away!", upper_text_x, upper_text_y);
+
+		 // making timer
 		 fill(200,200,200);
-		 rect(anim1_rect.x + 200, anim1_rect.y - 40,100, 20, 10);
+		 rect(mim2_ready_rect.x, mim2_ready_rect.y,100, 20, 10);
 		 fill(250+-2*timer, 2*timer, 0);
-		 rect(anim1_rect.x + 200, anim1_rect.y - 40,timer, 20,10);
+		 rect(mim2_ready_rect.x, mim2_ready_rect.y,timer, 20,10);
 
 		 if (mouse_in_box(anim1_rect.x, anim1_rect.y, anim1_rect.l, anim1_rect.h)){
 			 //stroke(50,50,200);
@@ -273,7 +296,7 @@ var draw_mimic_game = function(animal1, animal2){
 
 function draw() {
 	if(health <= 0){
-			background(255);
+			background(light_red);
 	}
 	else{
 	  if (scene == "Intro"){
@@ -291,13 +314,33 @@ function draw() {
 		  draw_mimic_game(animal_pair[pair_count][0],animal_pair[pair_count][1]);
 	  }
 		if(scene == "GoodEnd") {
-				background(0);
+				background(light_green);
 		}
 }
+if (scene != "Mimic"){
+	if (mouse_in_box(restart_rect.x, restart_rect.y, restart_rect.l,restart_rect.h)){
+		fill(orange);
+	}
+	else{
+		fill(light_purple);
+	}
+		noStroke();
+	  rect(restart_rect.x,restart_rect.y,restart_rect.l,restart_rect.h, restart_rect.s);
+	  fill(white);
+		textSize(14);
+	  text("RESTART?", 875, 580);
+
+}
 	image(bird, mouseX-50, mouseY-100, 120,120);
+	fill(255);
+	text(mouseX +", " + mouseY, mouseX, mouseY);
 }
 function mouseClicked() {
-
+	if(mouse_in_box(restart_rect.x,restart_rect.y,restart_rect.l,restart_rect.h)){
+		scene = "Mimic";
+		score = 0;
+		health = 3;
+	}
 	if (scene == "Intro" && mouse_in_box(choose_mimic_rect.x, choose_mimic_rect.y,
                                        choose_mimic_rect.l, choose_mimic_rect.h)){
   	scene = "Mimic";
