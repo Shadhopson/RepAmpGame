@@ -379,7 +379,7 @@ function mouseClicked() {
 	if(mouse_in_box(restart_rect.x,restart_rect.y,restart_rect.l,restart_rect.h)){
 		scene = "Mimic";
 		score = 0;
-		health = 3;
+		health = 5;
 		change = true;
 		photo_counter =  1;
 		chosen = false;
