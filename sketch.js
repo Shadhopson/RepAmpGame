@@ -60,7 +60,7 @@ var eat_rect = new rect_info(screenWidth/2 - 70,screenHeight - 175,115,40, 10);
 var anim1_rect = new rect_info((screenWidth -(2*340 +50))/2,100,340,400, 0);
 var anim2_rect = new rect_info(anim1_rect.x+anim1_rect.l +50,anim1_rect.y, anim1_rect.l,anim1_rect.h,anim1_rect.s);
 var mim2_ready_rect = new rect_info(screenWidth/2 -80, screenHeight -70, 140,40, 10);
-var restart_rect =  new rect_info(885,600,90,50, 10);
+var restart_rect =  new rect_info(835,550,90,50, 10);
 
 var mimic_box = 0;
 function setup() {
