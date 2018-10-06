@@ -27,7 +27,7 @@ skarletkingMim = new Animal("Skarlet King Snake", "skarletking", "A Red Faced Me
 coralMod = new Animal("Coral Snake", "coral", "One of the most venomous snakes in North America. Don't bother it.")
 
 animals = {"redcheek":redcheekMod,"imitator":imitatorMim, "bushveld":bushveldMim,"oogpister":oogpisterMod, "skarletking": skarletkingMim, "coral": coralMod};
-
+'skarletkingMim'
 
 var screenWidth = 975;
 var  screenHeight = 650;
@@ -38,7 +38,7 @@ var photo_counter =  1;
 var chosen = false;
 var timer = 100;
 var scenes = ['Intro','Mimic', 'Mimic2','Mimic3', 'Noise'];
-var scene = "Mimic";
+var scene = "Mimic2";
 var is_mimic_first = 0;
 var pair_count = 0;
 var animal_pair = [["bushveld","oogpister"],["imitator", "redcheek"],["skarletking","coral"]];
@@ -49,6 +49,7 @@ var light_red = [178,72,61];
 var purple = [88,47,59];
 var light_green = [151,185,138];
 var light_purple = [176,94,118];
+var showRect = false;
 //setting parameters
 //making rectangles
 //var light_green = [0,250,0];
@@ -59,7 +60,7 @@ var eat_rect = new rect_info(screenWidth/2 - 70,screenHeight - 175,115,40, 10);
 var anim1_rect = new rect_info((screenWidth -(2*340 +50))/2,100,340,400, 0);
 var anim2_rect = new rect_info(anim1_rect.x+anim1_rect.l +50,anim1_rect.y, anim1_rect.l,anim1_rect.h,anim1_rect.s);
 var mim2_ready_rect = new rect_info(screenWidth/2 -80, screenHeight -70, 140,40, 10);
-var restart_rect =  new rect_info(865,550,90,50, 10);
+var restart_rect =  new rect_info(885,600,90,50, 10);
 
 var mimic_box = 0;
 function setup() {
@@ -70,6 +71,8 @@ function setup() {
         }
     }
 	bird = loadImage("pictures/bird.png")
+	goodEndImg = loadImage("pictures/birdgoodend.png")
+	badEndImg = loadImage("pictures/birdbadend.png")
   var cnv = createCanvas(975, 650);
   var cx = (windowWidth - 975) / 2;
   var cy = (windowHeight -650) /2;
@@ -140,14 +143,15 @@ var draw_mimic_intro = function(){
 		var noteheight = 500;
     var note_x =  screenWidth/2 - notewidth/2;
 		var note_y = screenHeight/2 - noteheight/2;
+		image(goodEndImg, 0,0, screenWidth, screenHeight);
     rect(note_x,note_y,notewidth,noteheight);
     fill(0);
     textSize(25);
-    text(" You're a young predatory bird, new to hunting in an\
- area full of dangerous prey! Some are too dangerous to hunt, \
-but some animals just mimic how the dangerous animals look! \
-Can you tell the difference between a dangerous prey and the \
-safe to eat mimic and fill your stomach?", note_x + 75,note_y + 75, 370);
+    text(" You're a migrating predatory bird, hunting in a\
+ new area full of dangerous creatures! Some are too dangerous to hunt, \
+but some animals just mimic how the dangerous ones look! \
+Can you tell the difference between the hazardous creatures and their \
+safe to eat mimics and fill your stomach?", note_x + 75,note_y + 75, 400);
     if (mouse_in_box(eat_rect.x,eat_rect.y,eat_rect.l,eat_rect.h)){
         fill(orange);
     }
@@ -164,6 +168,7 @@ var get_random_int =  function(max) {
 }
 
 var draw_animals = function(animal1, animal2, photoNum, ordered){
+	//image(goodEndImg, 0,0, screenWidth, screenHeight);
 	var rand_num = 0;
 	if (ordered || is_mimic_first){
 	   image(animals[animal1].photos[photoNum], anim1_rect.x,anim1_rect.y,anim1_rect.l,anim1_rect.h);
@@ -191,7 +196,7 @@ var draw_mimic_start_scene = function(animal1, animal2){
    text(animals[animal2].name, anim2_rect.x, anim2_rect.y-5);
    bottomTextSize = 20;
    textSize(bottomTextSize);
-  text(animals[animal1].info, anim1_rect.x, anim1_rect.y + anim1_rect.h +bottomTextSize);
+  text(animals[animal1].info, anim1_rect.x, anim1_rect.y + anim1_rect.h +bottomTextSize, anim1_rect.l);
   text(animals[animal2].info, anim2_rect.x, anim2_rect.y + anim2_rect.h +bottomTextSize, anim2_rect.l);
  if (mouse_in_box(mim2_ready_rect.x, mim2_ready_rect.y, mim2_ready_rect.l,
              mim2_ready_rect.h)){
@@ -240,9 +245,9 @@ var draw_mimic_game = function(animal1, animal2){
    background(purple);
 	 fill(255);
    draw_animals(animal1, animal2,photo_counter ,false);
-	 text(mouseX +', ' + mouseY, mouseX, mouseY);
+	 //text(mouseX +', ' + mouseY, mouseX, mouseY);
 	 for (var i = 0; i < health; i++){
-	    draw_heart(10 + i*50, 25);
+	    draw_heart(90 + i*50, 25);
    }
 	 textSize(40);
 	 fill(white);
@@ -251,22 +256,32 @@ var draw_mimic_game = function(animal1, animal2){
 	 var upper_text_y = anim1_rect.y +450;
 	 var extra = 100;
 	 textSize(30);
-	 if (chosen){
+	 if (chosen && timer > 10){
 		 draw_button();
 		 fill(white);
       if(correct){
-
+				timer = 100;
 				text("Tasty! Nice Catch!", upper_text_x +100, upper_text_y);
+				noFill();
+				strokeWeight(20);
+				stroke(light_green);
+				rect(showRect.x, showRect.y, showRect.l, showRect.h);
+				strokeWeight(1);
 			}
 			else{
-
+				timer = 100;
 				text("Ouch! Don't eat that!",upper_text_x+100, upper_text_y);
+				noFill();
+				strokeWeight(20);
+				stroke(light_red);
+				rect(showRect.x, showRect.y, showRect.l, showRect.h);
+				strokeWeight(1);
 			}
 		}
 
 	 else if(timer <= 10){
-
-		 	text("It Escaped!", upper_text_x+100, upper_text_y);
+      change = false;
+		 	text("  It Escaped!", upper_text_x+100, upper_text_y);
 			draw_button();
 	 }
 	 else{
@@ -297,6 +312,23 @@ var draw_mimic_game = function(animal1, animal2){
 function draw() {
 	if(health <= 0){
 			background(light_red);
+			if (mouse_in_box(restart_rect.x, restart_rect.y, restart_rect.l,restart_rect.h)){
+				fill(orange);
+			}
+			else{
+				fill(light_purple);
+			}
+				noStroke();
+			  rect(restart_rect.x,restart_rect.y,restart_rect.l,restart_rect.h, restart_rect.s);
+			  fill(white);
+				textSize(14);
+			  text("RESTART?", restart_rect.x + 10, restart_rect.y +30);
+				badImgWidth = 500;
+				textSize(35);
+				fill(0);
+				image(badEndImg, screenWidth/2-badImgWidth/2, screenHeight/2-badImgWidth/2 +80, badImgWidth,badImgWidth);
+				text("Ouch! You don't feel very well.", 200, 80);
+				text("Rest up and try again tomorrow.", 200, 150);
 	}
 	else{
 	  if (scene == "Intro"){
@@ -315,6 +347,14 @@ function draw() {
 	  }
 		if(scene == "GoodEnd") {
 				background(light_green);
+				goodImgWidth = 800
+				textSize(30);
+				image(goodEndImg, screenWidth/2 - goodImgWidth/2, screenHeight/2 -200, goodImgWidth, 400);
+				text("Congratulations on making it through your hunts! \
+				             Time to start the long flight!", 200, 50, 700)
+				textSize(40);
+				text("You are flying high and feeling " + Math.round((score *(2/3))) + "% full!", 200, 570, 750)
+
 		}
 }
 if (scene != "Mimic"){
@@ -328,18 +368,23 @@ if (scene != "Mimic"){
 	  rect(restart_rect.x,restart_rect.y,restart_rect.l,restart_rect.h, restart_rect.s);
 	  fill(white);
 		textSize(14);
-	  text("RESTART?", 875, 580);
+	  text("RESTART?", restart_rect.x + 10, restart_rect.y +30);
 
 }
 	image(bird, mouseX-50, mouseY-100, 120,120);
 	fill(255);
-	text(mouseX +", " + mouseY, mouseX, mouseY);
+	//text(mouseX +", " + mouseY, mouseX, mouseY);
 }
 function mouseClicked() {
 	if(mouse_in_box(restart_rect.x,restart_rect.y,restart_rect.l,restart_rect.h)){
 		scene = "Mimic";
 		score = 0;
 		health = 3;
+		change = true;
+		photo_counter =  1;
+		chosen = false;
+		timer = 100;
+		pair_count = 0;
 	}
 	if (scene == "Intro" && mouse_in_box(choose_mimic_rect.x, choose_mimic_rect.y,
                                        choose_mimic_rect.l, choose_mimic_rect.h)){
@@ -360,6 +405,7 @@ function mouseClicked() {
 		//choosing a creature
  		if (mouse_in_box(anim1_rect.x, anim1_rect.y, anim1_rect.l,
 		       anim1_rect.h) && change){
+						 showRect = anim1_rect;
 						 if(is_mimic_first){
 							 score +=10;
 							 chosen = true;
@@ -375,6 +421,7 @@ function mouseClicked() {
 					 }
 	if (mouse_in_box(anim2_rect.x, anim2_rect.y, anim2_rect.l,
 			 		 anim2_rect.h) && change){
+						 showRect = anim2_rect;
 			 			if(!is_mimic_first){
 			 					score +=10;
 			 					chosen = true;
