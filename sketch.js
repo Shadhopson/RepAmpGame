@@ -31,7 +31,7 @@ animals = {"redcheek":redcheekMod,"imitator":imitatorMim, "bushveld":bushveldMim
 
 var screenWidth = 975;
 var  screenHeight = 650;
-var health = 3;
+var health = 5;
 var score = 0;
 var change = true;
 var photo_counter =  1;
@@ -241,7 +241,7 @@ var draw_heart = function(x,y){
 }
 var correct = true;
 var draw_mimic_game = function(animal1, animal2){
-	 timer -= 0.3;
+	 timer -= 0.1;
    background(purple);
 	 fill(255);
    draw_animals(animal1, animal2,photo_counter ,false);
