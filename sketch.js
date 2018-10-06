@@ -161,6 +161,11 @@ var draw_mimic_intro = function(){
 		flockY+= flockChangeY;
 		image(goodEndImg, flockX,flockY, screenWidth, screenHeight);
     rect(note_x,note_y,notewidth,noteheight);
+		fill(white);
+		textSize(25);
+		text("CAN YOU...", screenWidth/2-250, 25);
+		textSize(45);
+		text("CATCH-THE-MIMIC!", screenWidth/2-200, 70);
     fill(0);
     textSize(25);
     text(" You're a migrating predatory bird, hunting in a\
