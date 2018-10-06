@@ -169,10 +169,10 @@ but some animals just mimic how the dangerous ones look! \
 Can you tell the difference between the hazardous creatures and their \
 safe to eat mimics and fill your stomach?", note_x + 75,note_y + 75, 400);
     if (mouse_in_box(eat_rect.x,eat_rect.y,eat_rect.l,eat_rect.h)){
-        fill(orange);
+        fill(light_purple);
     }
     else{
-        fill(light_purple);
+        fill(orange);
     }
   	rect(eat_rect.x,eat_rect.y,eat_rect.l,eat_rect.h, eat_rect.s);
     fill(0);
