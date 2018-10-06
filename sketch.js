@@ -136,6 +136,12 @@ var draw_intro = function(){
   }
 
 // MIMIC GAME INTRO
+var flockX = -200;
+var flockY = -200;
+var flockChangeX = 0.5;
+var flockChangeY = 0.2;
+var flockAccX = 0.007;
+var flockAccY = 0.005;
 var draw_mimic_intro = function(){
     background(purple);
     fill(white);
@@ -143,7 +149,17 @@ var draw_mimic_intro = function(){
 		var noteheight = 500;
     var note_x =  screenWidth/2 - notewidth/2;
 		var note_y = screenHeight/2 - noteheight/2;
-		image(goodEndImg, 0,0, screenWidth, screenHeight);
+		if (Math.abs(flockChangeX) > 1.5){
+			flockAccX *= -1;
+		}
+		if (Math.abs(flockChangeY) > 1.5){
+			flockAccY *= -1;
+		}
+		flockChangeY += flockAccY
+		flockChangeX += flockAccX;
+		flockX += flockChangeX;
+		flockY+= flockChangeY;
+		image(goodEndImg, flockX,flockY, screenWidth, screenHeight);
     rect(note_x,note_y,notewidth,noteheight);
     fill(0);
     textSize(25);
