@@ -241,7 +241,7 @@ var draw_heart = function(x,y){
 }
 var correct = true;
 var draw_mimic_game = function(animal1, animal2){
-	 timer -= 0.3;
+	 timer -= 0.6;
    background(purple);
 	 fill(255);
    draw_animals(animal1, animal2,photo_counter ,false);
