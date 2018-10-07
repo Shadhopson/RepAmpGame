@@ -377,7 +377,7 @@ function draw() {
 				text("Congratulations on making it through your hunts! \
 				             Time to start the long flight!", 200, 50, 700)
 				textSize(40);
-				text("You are flying high and feeling " + Math.round((score *(2/3))) + "% full!", 200, 570, 750)
+				text("You are flying high and feeling " + Math.round((score *(2/3))) + "% full!", 110, 570, 750)
 
 		}
 }
