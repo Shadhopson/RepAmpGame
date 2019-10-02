@@ -399,7 +399,7 @@ if (scene != "Mimic"){
 	fill(255);
 	//text(mouseX +", " + mouseY, mouseX, mouseY);
 }
-function mouseClicked() {
+function mousePressed() {
 	if(mouse_in_box(restart_rect.x,restart_rect.y,restart_rect.l,restart_rect.h)){
 		scene = "Mimic";
 		score = 0;
