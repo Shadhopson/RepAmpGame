@@ -29,10 +29,10 @@ coralMod = new Animal("Coral Snake", "coral", "One of the most venomous snakes i
 animals = {"redcheek":redcheekMod,"imitator":imitatorMim, "bushveld":bushveldMim,"oogpister":oogpisterMod, "skarletking": skarletkingMim, "coral": coralMod};
 'skarletkingMim'
 
-//var screenWidth = 975;
-//var  screenHeight = 650;
-var screenWidth = window.innerWidth;
-var  screenHeight = window.innerHeight;
+var screenWidth = 975;
+var  screenHeight = 650;
+//var screenWidth = window.innerWidth;
+//var  screenHeight = window.innerHeight;
 var health = 5;
 var score = 0;
 var change = true;
