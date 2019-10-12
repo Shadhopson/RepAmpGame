@@ -397,7 +397,7 @@ if (scene != "Mimic"){
 	  text("RESTART?", restart_rect.x + 10, restart_rect.y +30);
 
 }
-	image(bird, mouseX-50, mouseY-100, 120,120);
+	//image(bird, mouseX-50, mouseY-100, 120,120);
 	fill(255);
 	//text(mouseX +", " + mouseY, mouseX, mouseY);
 }
